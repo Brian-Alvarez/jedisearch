@@ -1,0 +1,72 @@
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import _ from "lodash";
+import "./App.css";
+
+
+function App() {
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [results, setResults] = useState([]);
+  const [requests, setRequests] = useState(0);
+
+  const baseUrl = "https://swapi.dev/api/";
+
+  //updates search bar when input changes
+  const handleChange = _.debounce((event) => {
+    setSearch(event.target.value);
+  }, 1000);
+
+  const fetchData = () => {
+    setLoading(true);
+    axios
+      .get(`${baseUrl}people/?search=${search}`)
+      .then((response) => {
+        setResults(response.data.results);
+        setLoading(false);
+        setRequests(requests + 1);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      fetchData();
+    } else {
+      isMounted.current = true;
+    }
+  }, [search]);
+
+  return (
+    <div>
+      <header>
+        <input autoFocus onChange={handleChange} />
+      </header>
+      {loading ? <h2>Loading...</h2> : ""}
+      <>
+        <div>
+          <h3>Search Results</h3>
+          <div className="totalRequests">
+            ({requests} requests executed so far)
+          </div>
+          <div>
+            {results.map((character) => (
+              <div>
+                <h4>
+                  {character.name} was born in {character.birth_year}
+                </h4>
+                <hr />
+              </div>
+            ))}
+          </div>
+        </div>
+      </>
+    </div>
+  );
+}
+
+export default App;
