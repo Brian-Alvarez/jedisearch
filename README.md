@@ -4,6 +4,8 @@ Using a public Star Wars API, assemble a simple React project that allows for us
 
 Requirements:
 
+Implement a search box that will query the Star Wars API (https://swapi.dev/), and allow the user to enter a search query and see the results underneath. The app should then return a list of characters that match that query.
+
 1. Implement a search box: The user can type into a search box. The search should be automatically executed as the user types (i.e. do not implement a Search button).
 While the new results are loading, any previous results should continue to be shown, in addition to a “Loading” text displayed beneath the search box. Include basic error handling
 
